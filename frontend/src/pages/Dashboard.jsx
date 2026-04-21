@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import Sidebar from "../component/Sidebar";
 import Navbar from "../component/Navbar";
+import Footer from "../component/Footer";
 import axios from "axios";
 
 function Dashboard() {
@@ -18,7 +18,6 @@ function Dashboard() {
 
   const calculateStrength = (profileData) => {
     let score = 0;
-
     if (profileData?.fullName) score += 10;
     if (profileData?.email) score += 10;
     if (profileData?.phone) score += 10;
@@ -26,12 +25,7 @@ function Dashboard() {
     if (profileData?.experience !== undefined) score += 10;
     if (profileData?.about) score += 10;
     if (profileData?.skills?.length > 0) score += 20;
-    if (
-      profileData?.resume ||
-      profileData?.resumeUrl
-    )
-      score += 20;
-
+    if (profileData?.resume || profileData?.resumeUrl) score += 20;
     return score;
   };
 
@@ -52,21 +46,11 @@ function Dashboard() {
         const data = res.data;
 
         setProfile(data);
-        setMessagesCount(
-          data.messagesCount || 0
-        );
-        setStrength(
-          calculateStrength(data)
-        );
+        setMessagesCount(data.messagesCount || 0);
+        setStrength(calculateStrength(data));
       } catch (error) {
-        console.error(
-          "Dashboard fetch error:",
-          error
-        );
-
-        if (
-          error.response?.status === 404
-        ) {
+        console.error("Dashboard fetch error:", error);
+        if (error.response?.status === 404) {
           setProfile(null);
         }
       } finally {
@@ -74,17 +58,15 @@ function Dashboard() {
       }
     };
 
-    if (user) {
-      fetchDashboardData();
-    }
+    if (user) fetchDashboardData();
   }, [user, getToken]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#eef2ff] via-[#f8fafc] to-[#dbeafe]">
+      <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-200">
         <Navbar />
         <Sidebar />
-        <div className="ml-[64px] md:ml-[256px] p-6">
+        <div className="ml-[64px] md:ml-[256px] px-6 pt-6">
           Loading dashboard...
         </div>
       </div>
@@ -94,284 +76,181 @@ function Dashboard() {
   const resumeLink =
     typeof profile?.resume === "string"
       ? profile.resume
-      : profile?.resume?.url ||
-        profile?.resumeUrl;
+      : profile?.resume?.url || profile?.resumeUrl;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#eef2ff] via-[#f8fafc] to-[#dbeafe]">
-      {/* Navbar */}
+    <div className=" min-h-screen bg-gradient-to-br from-green-100 via-white to-green-200">
       <Navbar />
-
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="ml-[64px] md:ml-[256px] w-[calc(100%-64px)] md:w-[calc(100%-256px)] min-h-[calc(100vh-80px)]">
-        <div className="p-6 bg-white/20 backdrop-blur-sm min-h-[calc(100vh-80px)]">
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: -25,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.6,
-            }}
-          >
-            <h2 className="text-3xl font-bold text-gray-800">
-              Welcome back,{" "}
-              {user?.firstName || "User"} 👋
-            </h2>
+      {/* ✅ PERFECT SPACING FIX */}
+      <div className="ml-[64px] md:ml-[256px] margin-top: 1rem px-6 pt-6 pb-6 flex flex-col min-h-screen">
+        <div className="flex-1">
 
-            <p className="text-gray-500 mt-1">
-              Here's what's happening today
-            </p>
-          </motion.div>
+          {/* 🆕 NEW USER CTA */}
+          {!profile && (
+            <div className="mb-4 bg-white/60 backdrop-blur-xl p-6 rounded-2xl shadow-lg border">
+              <h2 className="text-xl font-bold text-gray-800">
+                Welcome 👋
+              </h2>
+
+              <p className="text-gray-600 mt-2 margin-top: 1rem">
+                You haven’t created your profile yet. Complete your profile to unlock jobs and recruiter visibility.
+              </p>
+
+              <button
+                onClick={() => navigate("/create-profile")}
+                className="mt-4 bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg transition"
+              >
+                Create Profile
+              </button>
+            </div>
+          )}
+
+          {/* HEADER */}
+          <h2 className="text-3xl font-bold text-gray-800">
+            Welcome back, {user?.firstName || "User"} 👋
+          </h2>
 
           {/* TOP CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-4">
             {[
-              {
-                title:
-                  "Profile Strength",
-                value: `${strength}%`,
-                isProgress: true,
-              },
-              {
-                title:
-                  "Recruiter Views",
-                value:
-                  profile?.views || 0,
-              },
-              {
-                title: "Messages",
-                value:
-                  messagesCount,
-              },
-              {
-                title: "Skills",
-                value:
-                  profile?.skills
-                    ?.length || 0,
-              },
+              { title: "Profile Strength", value: `${strength}%`, isProgress: true },
+              { title: "Recruiter Views", value: profile?.views || 0 },
+              { title: "Messages", value: messagesCount },
+              { title: "Skills", value: profile?.skills?.length || 0 },
             ].map((card, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{
-                  opacity: 0,
-                  y: 35,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  delay:
-                    index * 0.15,
-                }}
-                whileHover={{
-                  scale: 1.03,
-                  y: -6,
-                }}
-                className="bg-white/70 backdrop-blur-xl p-5 rounded-2xl shadow-xl border border-white/40"
+                className="bg-white/40 backdrop-blur-xl p-5 rounded-2xl shadow-lg border"
               >
-                <h6 className="text-gray-500">
-                  {card.title}
-                </h6>
-
-                <h3 className="text-3xl font-bold mt-3 text-blue-600">
+                <h6 className="text-gray-600">{card.title}</h6>
+                <h3 className="text-2xl font-bold mt-2 text-green-600">
                   {card.value}
                 </h3>
 
                 {card.isProgress && (
                   <div className="mt-3">
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <motion.div
-                        initial={{
-                          width: 0,
-                        }}
-                        animate={{
-                          width: `${strength}%`,
-                        }}
-                        transition={{
-                          duration: 1,
-                        }}
-                        className="bg-blue-500 h-2 rounded-full"
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
+                        style={{ width: `${strength}%` }}
                       />
                     </div>
-
-                    <p className="text-sm mt-2 font-medium">
-                      {strength}% Complete
-                    </p>
                   </div>
                 )}
-              </motion.div>
+              </div>
             ))}
           </div>
 
-          {/* PROFILE SECTION */}
-          {profile ? (
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 40,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.7,
-              }}
-              className="bg-white/75 backdrop-blur-xl rounded-3xl shadow-2xl mt-8 p-8 border border-white/40"
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-800">
-                    {
-                      profile.fullName
-                    }
-                  </h3>
+          {/* MAIN GRID */}
+          {profile && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
-                  <p className="text-gray-500 mt-1">
-                    {
-                      profile.location
-                    }
-                  </p>
+              {/* PROFILE */}
+              <div className="bg-gradient-to-br from-green-400 to-green-600 text-white p-6 rounded-3xl shadow-2xl sticky top-24 h-fit">
+                <h3 className="text-xl font-bold">{profile.fullName}</h3>
+                <p className="opacity-80">{profile.location}</p>
+
+                <div className="mt-4 space-y-1 text-sm">
+                  <p>Email: {profile.email}</p>
+                  <p>Phone: {profile.phone}</p>
+                  <p>Experience: {profile.experience} yrs</p>
                 </div>
 
                 <button
-                  onClick={() =>
-                    navigate(
-                      "/create-profile"
-                    )
-                  }
-                  className="bg-blue-600 text-white px-5 py-2 rounded-xl shadow-md hover:bg-blue-700"
+                  onClick={() => navigate("/create-profile")}
+                  className="mt-5 bg-black/70 px-4 py-2 rounded-xl"
                 >
                   Edit Profile
                 </button>
               </div>
 
-              {/* DETAILS */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                <div className="bg-white p-5 rounded-2xl shadow">
-                  <h4 className="font-semibold text-gray-700 mb-2">
-                    Email
-                  </h4>
-                  <p>
-                    {profile.email ||
-                      "Not Added"}
-                  </p>
+              {/* RIGHT SIDE */}
+              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* ABOUT */}
+                <div className="md:col-span-2 bg-white p-6 rounded-3xl shadow">
+                  <h4>About</h4>
+                  <p>{profile.about}</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl shadow">
-                  <h4 className="font-semibold text-gray-700 mb-2">
-                    Phone
-                  </h4>
-                  <p>
-                    {profile.phone ||
-                      "Not Added"}
-                  </p>
+                {/* SEARCH APPEARANCE */}
+                <div className="md:col-span-2 bg-white p-6 rounded-3xl shadow">
+                  <h4 className="mb-4 font-semibold">Search Appearance</h4>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div>
+                      <p className="text-gray-500 text-xs">Views</p>
+                      <h3 className="font-bold text-green-600">
+                        {profile?.views || 0}
+                      </h3>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-500 text-xs">Clicks</p>
+                      <h3 className="font-bold text-green-600">
+                        {profile?.clicks || 0}
+                      </h3>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-500 text-xs">Visibility</p>
+                      <h3 className="font-bold text-green-600">
+                        {strength}%
+                      </h3>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-500 text-xs">Last Active</p>
+                      <h3 className="font-bold text-green-600">
+                        {profile?.lastActive
+                          ? new Date(profile.lastActive).toLocaleDateString()
+                          : "Today"}
+                      </h3>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl shadow">
-                  <h4 className="font-semibold text-gray-700 mb-2">
-                    Experience
-                  </h4>
-                  <p>
-                    {profile.experience ||
-                      0} Years
-                  </p>
+                {/* SKILLS */}
+                <div className="md:col-span-2 bg-white p-6 rounded-3xl shadow">
+                  <h4>Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.skills?.map((skill, i) => (
+                      <span
+                        key={i}
+                        className="bg-green-100 px-3 py-1 rounded-full text-sm"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl shadow">
-                  <h4 className="font-semibold text-gray-700 mb-2">
-                    Resume
-                  </h4>
-
+                {/* RESUME */}
+                <div className="md:col-span-2 bg-white p-6 rounded-3xl shadow">
+                  <h4>Resume</h4>
                   {resumeLink ? (
                     <a
-                      href={
-                        resumeLink
-                      }
+                      href={resumeLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-blue-600 underline break-all text-sm"
+                      className="text-green-600 underline"
                     >
-                      {
-                        resumeLink
-                      }
+                      View Resume
                     </a>
                   ) : (
-                    <p>
-                      Not Uploaded
-                    </p>
+                    "Not Uploaded"
                   )}
                 </div>
+
               </div>
-
-              <div className="bg-white p-5 rounded-2xl shadow mt-6">
-                <h4 className="font-semibold text-gray-700 mb-2">
-                  About
-                </h4>
-                <p>
-                  {profile.about ||
-                    "No About Info"}
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-2xl shadow mt-6">
-                <h4 className="font-semibold text-gray-700 mb-3">
-                  Skills
-                </h4>
-
-                <div className="flex flex-wrap gap-2">
-                  {profile.skills?.length >
-                  0 ? (
-                    profile.skills.map(
-                      (
-                        skill,
-                        index
-                      ) => (
-                        <span
-                          key={index}
-                          className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
-                        >
-                          {skill}
-                        </span>
-                      )
-                    )
-                  ) : (
-                    <p>
-                      No Skills Added
-                    </p>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ) : (
-            <div className="mt-8 bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl p-8 text-center border border-white/40">
-              <h3 className="text-2xl font-semibold mb-3">
-                Complete Your Profile 🚀
-              </h3>
-
-              <button
-                onClick={() =>
-                  navigate(
-                    "/create-profile"
-                  )
-                }
-                className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700"
-              >
-                Create Profile
-              </button>
             </div>
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

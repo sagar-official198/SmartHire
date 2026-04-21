@@ -5,46 +5,43 @@ function Sidebar() {
   const location = useLocation();
 
   const menu = [
-    {
-      name: "My Profile",
-      path: "/profile",
-      icon: "👤",
-    },
-    {
-      name: "Resume",
-      path: "/resume",
-      icon: "📄",
-    },
-    {
-      name: "Settings",
-      path: "/settings",
-      icon: "⚙️",
-    },
+    { name: "My Profile", path: "/profile", icon: "👤" },
+    { name: "Resume", path: "/ats-checker", icon: "📄" },
+    
   ];
 
   return (
-    <div className="fixed top-20 left-0 h-[calc(100vh-80px)] bg-white shadow-lg w-16 md:w-64 transition-all duration-300 p-3 md:p-6">
-      <div className="flex flex-col gap-2">
-        {menu.map((item, index) => (
-          <Link
-            key={index}
-            to={item.path}
-            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition font-medium
-              ${
-                location.pathname === item.path
-                  ? "bg-blue-500 text-white shadow"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-          >
-            <span className="text-xl">
-              {item.icon}
-            </span>
+    <div className="fixed top-24 left-4 w-16 md:w-64">
 
-            <span className="hidden md:block">
-              {item.name}
-            </span>
-          </Link>
-        ))}
+      {/* GLASS CONTAINER */}
+      <div className="bg-white/40 backdrop-blur-2xl border border-white/30 shadow-xl rounded-3xl p-3 md:p-5">
+
+        <div className="flex flex-col gap-3">
+
+          {menu.map((item, index) => {
+            const active = location.pathname === item.path;
+
+            return (
+              <Link
+                key={index}
+                to={item.path}
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200
+                  ${
+                    active
+                      ? "bg-green-500 text-white shadow-md"
+                      : "text-gray-700 hover:bg-white/60"
+                  }`}
+              >
+                <span className="text-xl">{item.icon}</span>
+
+                <span className="hidden md:block font-medium">
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
+
+        </div>
       </div>
     </div>
   );

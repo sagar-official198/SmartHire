@@ -371,14 +371,23 @@ SmartHire`
                     </div>
                   </div>
 
-                  <button
-                    onClick={() =>
-                      setSelectedCandidate(candidate)
-                    }
-                    className="mt-5 bg-indigo-600 text-white px-4 py-2 rounded-xl"
-                  >
-                    View Profile
-                  </button>
+                      <button
+                      onClick={async () => {
+                        setSelectedCandidate(candidate); // existing logic same
+
+                        // 🔥 ADD THIS (NEW)
+                        try {
+                          await axios.post(
+                            `http://localhost:5000/api/jobseeker/views/${candidate._id}`
+                          );
+                        } catch (err) {
+                          console.error("View update failed", err);
+                        }
+                      }}
+                      className="mt-5 bg-indigo-600 text-white px-4 py-2 rounded-xl"
+                    >
+                      View Profile
+                    </button>
                 </div>
               ))}
             </div>
@@ -447,13 +456,6 @@ SmartHire`
                   className="bg-red-500 text-white px-4 py-2 rounded-xl"
                 >
                   Close
-                </button>
-
-                <button
-                  onClick={handleMessageClick}
-                  className="bg-green-500 text-white px-4 py-2 rounded-xl"
-                >
-                  Message
                 </button>
 
                 <button

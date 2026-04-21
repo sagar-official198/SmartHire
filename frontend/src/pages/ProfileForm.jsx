@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import {
-  useNavigate,
-} from "react-router-dom";
-import {
-  useAuth,
-  useUser,
-} from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import Sidebar from "../component/Sidebar";
 import Navbar from "../component/Navbar";
@@ -15,69 +10,48 @@ function ProfileForm() {
   const { getToken } = useAuth();
   const { user } = useUser();
 
-  const [formData, setFormData] =
-    useState({
-      fullName: "",
-      email:
-        user
-          ?.primaryEmailAddress
-          ?.emailAddress || "",
-      phone: "",
-      location: "",
-      experience: "",
-      skills: "",
-      about: "",
-      salary: "",
-      resume: "",
-    });
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: user?.primaryEmailAddress?.emailAddress || "",
+    phone: "",
+    location: "",
+    experience: "",
+    skills: "",
+    about: "",
+    salary: "",
+    resume: "",
+  });
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } =
-      e.target;
-
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (
-    e
-  ) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
 
-      const token =
-        await getToken();
+      const token = await getToken();
 
       const payload = {
-        fullName:
-          formData.fullName,
+        fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
-        location:
-          formData.location,
-        experience:
-          Number(
-            formData.experience
-          ) || 0,
-        salary:
-          Number(
-            formData.salary
-          ) || 0,
+        location: formData.location,
+        experience: Number(formData.experience) || 0,
+        salary: Number(formData.salary) || 0,
 
-        skills:
-          formData.skills
-            .split(",")
-            .map((skill) =>
-              skill.trim()
-            )
-            .filter(Boolean),
+        skills: formData.skills
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter(Boolean),
 
         about: formData.about,
 
@@ -97,175 +71,170 @@ function ProfileForm() {
         }
       );
 
-      alert(
-        "Profile saved successfully 🚀"
-      );
-
+      alert("Profile saved successfully 🚀");
       navigate("/dashboard");
     } catch (error) {
       console.error(
         "Profile save error:",
-        error.response?.data ||
-          error.message
+        error.response?.data || error.message
       );
-
-      alert(
-        "Failed to save profile"
-      );
+      alert("Failed to save profile");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-200 to-green-500 flex">
+
+      {/* Sidebar */}
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      {/* Main */}
+      <div className="flex-1">
         <Navbar />
 
-        <div className="p-6">
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-6">
-              Complete Your Profile 🚀
-            </h2>
+        {/* Content */}
+        <div className="ml-[260px] pt-24 p-8">
 
+          <div className="max-w-5xl mx-auto bg-white/40 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-8">
+
+            {/* Heading */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-800">
+                Complete Your Profile 🚀
+              </h2>
+              <p className="text-gray-500 mt-1">
+                Fill your details to get better opportunities
+              </p>
+            </div>
+
+            {/* Form */}
             <form
-              onSubmit={
-                handleSubmit
-              }
-              className="grid grid-cols-1 md:grid-cols-2 gap-5"
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Full Name"
-                value={
-                  formData.fullName
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3"
-                required
-              />
 
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={
-                  formData.email
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3"
-                required
-              />
+              {/* Full Name */}
+              <div>
+                <label className="text-sm text-gray-600">Full Name</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400 outline-none"
+                  required
+                />
+              </div>
 
-              <input
-                type="text"
-                name="phone"
-                placeholder="Phone"
-                value={
-                  formData.phone
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3"
-              />
+              {/* Email */}
+              <div>
+                <label className="text-sm text-gray-600">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3 focus:ring-2 focus:ring-green-400 outline-none"
+                  required
+                />
+              </div>
 
-              <input
-                type="text"
-                name="location"
-                placeholder="Location"
-                value={
-                  formData.location
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3"
-              />
+              {/* Phone */}
+              <div>
+                <label className="text-sm text-gray-600">Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
 
-              <input
-                type="number"
-                name="experience"
-                placeholder="Experience"
-                value={
-                  formData.experience
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3"
-              />
+              {/* Location */}
+              <div>
+                <label className="text-sm text-gray-600">Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
 
-              <input
-                type="number"
-                name="salary"
-                placeholder="Expected Salary"
-                value={
-                  formData.salary
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3"
-              />
+              {/* Experience */}
+              <div>
+                <label className="text-sm text-gray-600">Experience</label>
+                <input
+                  type="number"
+                  name="experience"
+                  value={formData.experience}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
 
-              <input
-                type="text"
-                name="skills"
-                placeholder="React, Node, MongoDB"
-                value={
-                  formData.skills
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3 md:col-span-2"
-              />
+              {/* Salary */}
+              <div>
+                <label className="text-sm text-gray-600">Expected Salary</label>
+                <input
+                  type="number"
+                  name="salary"
+                  value={formData.salary}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
 
-              <textarea
-                name="about"
-                rows="4"
-                placeholder="About yourself"
-                value={
-                  formData.about
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3 md:col-span-2"
-              />
+              {/* Skills */}
+              <div className="md:col-span-2">
+                <label className="text-sm text-gray-600">Skills</label>
+                <input
+                  type="text"
+                  name="skills"
+                  placeholder="React, Node, MongoDB"
+                  value={formData.skills}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
 
-              <input
-                type="text"
-                name="resume"
-                placeholder="Resume Link"
-                value={
-                  formData.resume
-                }
-                onChange={
-                  handleChange
-                }
-                className="border rounded-lg px-4 py-3 md:col-span-2"
-              />
+              {/* About */}
+              <div className="md:col-span-2">
+                <label className="text-sm text-gray-600">About</label>
+                <textarea
+                  name="about"
+                  rows="4"
+                  value={formData.about}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
 
+              {/* Resume */}
+              <div className="md:col-span-2">
+                <label className="text-sm text-gray-600">Resume Link</label>
+                <input
+                  type="text"
+                  name="resume"
+                  value={formData.resume}
+                  onChange={handleChange}
+                  className="mt-1 w-full bg-white/70 border border-white/40 rounded-xl px-4 py-3"
+                />
+              </div>
+
+              {/* Button */}
               <button
                 type="submit"
-                disabled={
-                  loading
-                }
-                className="md:col-span-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+                disabled={loading}
+                className="md:col-span-2 mt-4 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl shadow-lg hover:scale-[1.02] transition"
               >
-                {loading
-                  ? "Saving..."
-                  : "Submit Profile"}
+                {loading ? "Saving..." : "Save Profile"}
               </button>
+
             </form>
           </div>
         </div>

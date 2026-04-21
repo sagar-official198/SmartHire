@@ -35,6 +35,18 @@ const jobSeekerSchema =
         type: Number,
         default: 0,
       },
+      views: {
+  type: Number,
+  default: 0
+},
+clicks: {
+  type: Number,
+  default: 0
+},
+lastActive: {
+  type: Date,
+  default: Date.now
+},
     },
     { timestamps: true }
   );

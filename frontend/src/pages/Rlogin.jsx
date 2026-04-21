@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
 export default function RecruiterLogin() {
@@ -20,7 +19,7 @@ export default function RecruiterLogin() {
     });
   };
 
-  // 🔥 NORMAL LOGIN FIX
+  // ✅ NORMAL LOGIN
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,18 +34,12 @@ export default function RecruiterLogin() {
 
       const data = await res.json();
 
-      console.log("Login Response:", data);
-
       if (data.success) {
-        // ✅ save token
         localStorage.setItem("recruiterToken", data.token);
-
-        // ✅ redirect
         navigate("/recruiter-dashboard");
       } else {
         alert(data.message || "Login failed");
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -60,6 +53,7 @@ export default function RecruiterLogin() {
         <h2 className="text-2xl font-semibold text-center mb-2">
           Recruiter Login
         </h2>
+
         <p className="text-sm text-gray-500 text-center mb-6">
           Welcome back! Please enter your details
         </p>
@@ -102,13 +96,14 @@ export default function RecruiterLogin() {
             </span>
           </div>
 
-          {/* ✅ KEEP THIS (UNCHANGED) */}
+          {/* FORGOT PASSWORD */}
           <div className="text-right">
             <a href="#" className="text-sm text-black hover:underline">
               Forgot password?
             </a>
           </div>
 
+          {/* SUBMIT */}
           <button
             type="submit"
             className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
@@ -117,48 +112,7 @@ export default function RecruiterLogin() {
           </button>
         </form>
 
-        {/* DIVIDER */}
-        <div className="my-6 flex items-center">
-          <div className="flex-1 h-px bg-gray-200"></div>
-          <span className="px-3 text-sm text-gray-400">OR</span>
-          <div className="flex-1 h-px bg-gray-200"></div>
-        </div>
-
-        {/* 🔥 GOOGLE LOGIN FIX */}
-        <div className="flex justify-center">
-          <GoogleLogin
-            onSuccess={async (credentialResponse) => {
-              try {
-                const token = credentialResponse.credential;
-
-                const res = await fetch(`${API}/api/recruiter/google-login`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ token }),
-                });
-
-                const data = await res.json();
-
-                console.log("Google Login:", data);
-
-                if (data.success) {
-                  localStorage.setItem("recruiterToken", data.token);
-                  navigate("/recruiter-dashboard");
-                }
-
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-            onError={() => {
-              console.log("Google Login Failed");
-            }}
-          />
-        </div>
-
-        {/* ✅ KEEP THIS (UNCHANGED) */}
+        {/* SIGNUP */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Don’t have an account?{" "}
           <a href="/recruiter-signup" className="text-black font-medium">

@@ -18,6 +18,8 @@ import RecruiterFooter from "./pages/Rfooter";
 import JobSeekerMessage from "./pages/JobSeekerMessage";
 import RecruiterMessage from "./pages/RecruiterMessage";
 
+import ATSChecker from "./component/ATS";
+
 // ================= RECRUITER PROTECTED =================
 function RecruiterProtected({ children }) {
   const token = localStorage.getItem("recruiterToken");
@@ -70,6 +72,16 @@ function App() {
               </SignedOut>
             </>
           )
+        }
+      />
+
+       {/* ATS CHECKER */}
+      <Route
+        path="/ats-checker"
+        element={
+          <JobSeekerProtected>
+            <ATSChecker />
+          </JobSeekerProtected>
         }
       />
 
