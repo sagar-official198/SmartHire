@@ -24,7 +24,7 @@ export default function RecruiterSignup() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/recruiter/register",
+        "https://smarthire-af4a.onrender.com/api/recruiter/register",
         formData
       );
 
