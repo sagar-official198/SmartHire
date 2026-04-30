@@ -34,7 +34,7 @@ function JobSeekerMessage() {
       const token = await getToken();
 
       const res = await axios.get(
-        "http://localhost:5000/api/messages/history",
+        "https://smarthire-af4a.onrender.com/api/messages/history",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ function JobSeekerMessage() {
       const token = await getToken();
 
       const res = await axios.get(
-        `http://localhost:5000/api/messages/${userId}`,
+        `https://smarthire-af4a.onrender.com/api/messages/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ function JobSeekerMessage() {
       const token = await getToken();
 
       await axios.post(
-        "http://localhost:5000/api/messages/send",
+        "https://smarthire-af4a.onrender.com/api/messages/send",
         {
           receiverId:
             selectedUser._id,

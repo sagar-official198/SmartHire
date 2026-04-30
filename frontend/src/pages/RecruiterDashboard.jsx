@@ -139,7 +139,7 @@ SmartHire`
   const fetchDashboardData = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/recruiter/dashboard",
+        "https://smarthire-af4a.onrender.com/api/recruiter/dashboard",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -164,7 +164,7 @@ SmartHire`
   const searchCandidates = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/recruiter/search-candidates",
+        "https://smarthire-af4a.onrender.com/api/recruiter/search-candidates",
         {
           ...filters,
           skills: filters.skills
@@ -379,7 +379,7 @@ SmartHire`
                         // 🔥 ADD THIS (NEW)
                         try {
                           await axios.post(
-                            `http://localhost:5000/api/jobseeker/views/${candidate._id}`
+                            `https://smarthire-af4a.onrender.com/api/jobseeker/views/${candidate._id}`
                           );
                         } catch (err) {
                           console.error("View update failed", err);

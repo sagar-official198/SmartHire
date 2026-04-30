@@ -18,18 +18,20 @@ const app = express();
 // ================= MIDDLEWARE =================
 app.use(express.json());
 
+// ✅ TEMP: allow all origins (for deployment phase)
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: true,
     credentials: true,
   })
 );
 
+// Clerk middleware
 app.use(clerkMiddleware());
 
 // ================= TEST ROUTE =================
 app.get("/", (req, res) => {
-  res.status(200).send("Smart Hire API Running 🚀");
+  res.status(200).send("🚀 SmartHire API is running successfully");
 });
 
 // ================= ROUTES =================
@@ -50,7 +52,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB Connected Successfully");
   } catch (error) {
-    console.error("MongoDB Error:", error.message);
+    console.error("❌ MongoDB Error:", error.message);
     process.exit(1);
   }
 };
@@ -60,7 +62,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: true,
     credentials: true,
   },
 });
@@ -72,8 +74,6 @@ const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
   server.listen(PORT, () => {
-    console.log(
-      `🚀 Server running on http://localhost:${PORT}`
-    );
+    console.log(`🚀 Server running on port ${PORT}`);
   });
 });

@@ -40,7 +40,7 @@ function RecruiterMessage() {
   const fetchMessages = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/messages/${receiverId}`,
+        `https://smarthire-af4a.onrender.com/api/messages/${receiverId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ function RecruiterMessage() {
       }
 
       await axios.post(
-        "http://localhost:5000/api/messages/send",
+        "https://smarthire-af4a.onrender.com/api/messages/send",
         {
           receiverId,
           message:
@@ -98,7 +98,7 @@ function RecruiterMessage() {
 
     const interval = setInterval(() => {
       fetchMessages();
-    }, 1000);
+    }, 5000);
 
     return () =>
       clearInterval(interval);
