@@ -6,7 +6,7 @@ function Sidebar() {
 
   const menu = [
     { name: "My Profile", path: "/profile", icon: "👤" },
-    { name: "Resume", path: "/ats-checker", icon: "📄" },
+    { name: "Resume ATS", path: "/ats-checker", icon: "📄" },
     
   ];
 

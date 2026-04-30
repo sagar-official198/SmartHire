@@ -23,6 +23,7 @@ function RecruiterDashboard() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [popup, setPopup] = useState();
 
   const [filters, setFilters] = useState({
     role: "",
@@ -387,6 +388,10 @@ SmartHire`
                       className="mt-5 bg-indigo-600 text-white px-4 py-2 rounded-xl"
                     >
                       View Profile
+                    </button>
+
+                     <button className="mt-5 bg-green-500 text-white px-4 py-2 rounded-xl">
+                      Mark As shortlisted
                     </button>
                 </div>
               ))}
