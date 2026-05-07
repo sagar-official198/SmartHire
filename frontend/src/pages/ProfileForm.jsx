@@ -62,7 +62,7 @@ function ProfileForm() {
       };
 
       await axios.post(
-        "http://localhost:5000/api/jobseeker/profile",
+        "https://smarthire-af4a.onrender.com/api/jobseeker/profile",
         payload,
         {
           headers: {
