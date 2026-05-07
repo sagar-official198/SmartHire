@@ -35,7 +35,7 @@ function Dashboard() {
         const token = await getToken();
 
         const res = await axios.get(
-          "http://localhost:5000/api/jobseeker/profile",
+          "https://smarthire-af4a.onrender.com/api/jobseeker/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
