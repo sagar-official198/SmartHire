@@ -6,7 +6,7 @@
 Smarter Screening • Better Hiring
 
 ### 🌐 Live Demo
-🔗 Frontend: https://smart-hire-lyart.vercel.app  
+🔗 Frontend: https://smart-hire-phi.vercel.app 
 🔗 Backend: https://smarthire-af4a.onrender.com
 
 </div>
